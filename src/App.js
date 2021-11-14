@@ -48,7 +48,7 @@ function App() {
 	const [isHalted, setHalted] = useState(false)
 	const [changedMemoryAddresses, setChangedMemoryAddresses] = useState([])
 	const [isAccumulatorChanged, setAccumulatorChanged] = useState(false)
-	const [inputSpeed, setInputSpeed] = useState("")
+	const [inputSpeed, setInputSpeed] = useState("60")
 	const [speed, setSpeed] = useState(60)
 	const submitRef = useRef(null)
 	const loopRef = useRef(null)
@@ -72,7 +72,7 @@ function App() {
 	}
 
 	const onInputSubmitted = (event) => {
-		submitRef.current = input
+		submitRef.current = input.substring(0, 3)
 		setInput("")
 		event.preventDefault()
 	}
@@ -86,7 +86,6 @@ function App() {
 		if(speed <= 0) {
 			speed = 60
 		}
-		setInputSpeed("")
 		setSpeed(speed)
 		event.preventDefault()
 	}
@@ -272,7 +271,7 @@ function App() {
 							<input type="text" name="ioinput" value={input} onChange={onInputChanged} />
 						</form>
 						<form onSubmit={onSpeedSubmitted}>
-							<label htmlFor="runspeed">Speed (Current: {speed}Hz)</label>
+							<label htmlFor="runspeed">Speed ({speed}Hz)</label>
 							<input type="number" name="runspeed" value={inputSpeed} onChange={onSpeedChanged} />
 						</form>
 						<form>
