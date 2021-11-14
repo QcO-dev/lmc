@@ -5,6 +5,7 @@ import { useRef, useState } from 'react';
 import { assemble } from './assembler';
 import { step } from './emulator';
 import { languageDef, configuration } from './editor-config'
+import { examples } from './examples';
 
 const defaultString = [
 	"// Input two numbers, sum them, and output the result",
@@ -88,6 +89,10 @@ function App() {
 		setInputSpeed("")
 		setSpeed(speed)
 		event.preventDefault()
+	}
+
+	const selectedExampleChanged = (event) => {
+		editorRef.current.setValue(examples[event.target.value])
 	}
 
 	const assembleCode = () => {
@@ -247,6 +252,8 @@ function App() {
 		return Object.entries(registers).map(([register, value]) => <p style={{ minWidth: regToName[register].length + 2 + 3 + "ch" }} className={`register ${getColourBorder(register === "pc", isHalted)} ${((register === "ac" && isAccumulatorChanged) ? "yellow-border" : "")}`} key={register}>{regToName[register]}: {value}</p>)
 	}
 
+	const renderProgramSelectOptions = () => Object.keys(examples).map(e => <option value={e} key={e}>{e}</option>)
+
 	return (
 		<div className="App">
 			<h1 className="title">Little Man Computer</h1>
@@ -267,6 +274,14 @@ function App() {
 						<form onSubmit={onSpeedSubmitted}>
 							<label htmlFor="runspeed">Speed (Current: {speed}Hz)</label>
 							<input type="number" name="runspeed" value={inputSpeed} onChange={onSpeedChanged} />
+						</form>
+						<form>
+							<label htmlFor="selectprogram">Example</label>
+							<select onChange={selectedExampleChanged}>
+								<>
+									{renderProgramSelectOptions()}
+								</>
+							</select>
 						</form>
 					</div>
 					<div className="mem-reg-container">
