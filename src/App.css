@@ -1,3 +1,7 @@
+:root {
+	--bg-box: rgb(70, 70, 70);
+}
+
 * {
 	box-sizing: border-box;
 }
@@ -69,7 +73,7 @@ button:active {
 }
 
 .memory {
-	background-color: rgb(70, 70, 70);
+	background-color: var(--bg-box);
 	border-radius: 15px;
 }
 
@@ -80,7 +84,9 @@ button:active {
 
 .memory-item {
 	min-width: 5ch;
+	height: max-content;
 	font-family: 'Roboto Mono', 'Courier New', Courier, monospace;
+	border: 1px solid var(--bg-box);
 }
 
 .mem-reg-container {
@@ -97,12 +103,32 @@ button:active {
 	font-family: 'Roboto Mono', 'Courier New', Courier, monospace;
 }
 
+.register {
+	text-align: start;
+	border: 1px solid var(--bg-box);
+}
+
 .output-box {
 	background-color: rgb(70, 70, 70);
 	border-radius: 15px;
 	/*padding: 1.5rem;*/
-	min-height: 15vh;
+	min-height: 13vh;
 	width: 100%;
+}
+
+.output-box > h2 {
+	margin-bottom: 1px;
+}
+
+.output-box > p {
+	margin-top: 1px;
+}
+
+.forms {
+	display: flex;
+	flex-direction: row;
+	gap: 1rem;
+	justify-content: center;
 }
 
 .input-form {
@@ -124,4 +150,8 @@ label {
 
 .red-border {
 	border: 1px solid rgb(224, 35, 35);
+}
+
+.yellow-border {
+	border: 1px solid rgb(236, 177, 12);
 }

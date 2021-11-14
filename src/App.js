@@ -33,6 +33,10 @@ function App() {
 	const [input, setInput] = useState("")
 	const [waitingForInput, setWaitingForInput] = useState(false)
 	const [isHalted, setHalted] = useState(false)
+	const [changedMemoryAddresses, setChangedMemoryAddresses] = useState([])
+	const [isAccumulatorChanged, setAccumulatorChanged] = useState(false)
+	const [inputSpeed, setInputSpeed] = useState("")
+	const [speed, setSpeed] = useState(60)
 	const submitRef = useRef(null)
 	const loopRef = useRef(null)
 
@@ -57,6 +61,20 @@ function App() {
 	const onInputSubmitted = (event) => {
 		submitRef.current = input
 		setInput("")
+		event.preventDefault()
+	}
+
+	const onSpeedChanged = (event) => {
+		setInputSpeed(event.target.value)
+	}
+
+	const onSpeedSubmitted = (event) => {
+		let speed = parseInt(inputSpeed) || 60
+		if(speed <= 0) {
+			speed = 60
+		}
+		setInputSpeed("")
+		setSpeed(speed)
 		event.preventDefault()
 	}
 
@@ -89,6 +107,10 @@ function App() {
 		loopRef.current = setInterval(() => {
 			if (waiting && !submitRef.current)
 				return;
+
+			const memoryBefore = [...localMem];
+			const accumulatorBefore = localReg["ac"];
+
 			({ memory: localMem, ip, registers: localReg, halt, output: out, waitingForInput: waiting } = step(localMem, ip, localReg, out, waiting, submitRef.current))
 			if (submitRef.current)
 				submitRef.current = null
@@ -105,7 +127,16 @@ function App() {
 			setOutput(out)
 			setWaitingForInput(waiting)
 			setHalted(halt)
-		}, 1000 / 60)
+
+			let changedMem = []
+			for(let i = 0; i < localMem.length; i++) {
+				if(memoryBefore[i] !== localMem[i]) {
+					changedMem.push(i)
+				}
+			}
+			setChangedMemoryAddresses(changedMem)
+			setAccumulatorChanged(accumulatorBefore !== localReg["ac"])
+		}, 1000 / speed)
 	}
 
 	const stopCode = () => {
@@ -129,6 +160,9 @@ function App() {
 
 		let waiting = waitingForInput;
 
+		const memoryBefore = [...localMem];
+		const accumulatorBefore = localReg["ac"];
+
 		({ memory: localMem, ip, registers: localReg, halt, output: out, waitingForInput: waiting } = step(localMem, ip, localReg, out, waiting, submitRef.current))
 		if (submitRef.current)
 			submitRef.current = null
@@ -145,6 +179,15 @@ function App() {
 		setOutput(out)
 		setWaitingForInput(waiting)
 		setHalted(halt)
+		
+		let changedMem = []
+		for(let i = 0; i < localMem.length; i++) {
+			if(memoryBefore[i] !== localMem[i]) {
+				changedMem.push(i)
+			}
+		}
+		setChangedMemoryAddresses(changedMem)
+		setAccumulatorChanged(accumulatorBefore !== localReg["ac"])
 	}
 
 	const reset = () => {
@@ -160,6 +203,8 @@ function App() {
 		setOutput("")
 		setWaitingForInput(false)
 		setHalted(false)
+		setChangedMemoryAddresses([])
+		setAccumulatorChanged(false)
 	}
 
 	const renderMemory = () => {
@@ -173,7 +218,7 @@ function App() {
 			return <div className="memory-row" key={"memory" + i}>
 				<p className="memory-item">{i * 10}: </p>
 				<>{
-					values.map((value, j) => <p className={`memory-item ${getColourBorder(i * 10 + j === currentIp, isHalted)}`} key={"item" + i * 10 + j}>{value}</p>)
+					values.map((value, j) => <p className={`memory-item ${getColourBorder(i * 10 + j === currentIp, isHalted)} ${changedMemoryAddresses.includes(i * 10 + j) ? "yellow-border" : ""}`} key={"item" + i * 10 + j}>{value}</p>)
 				}</>
 			</div>
 		})
@@ -187,7 +232,7 @@ function App() {
 			"ac": "Accumulator"
 		}
 
-		return Object.entries(registers).map(([register, value]) => <p style={{ minWidth: regToName[register].length + 2 + 3 + "ch" }} className={getColourBorder(register === "pc", isHalted)} key={register}>{regToName[register]}: {value}</p>)
+		return Object.entries(registers).map(([register, value]) => <p style={{ minWidth: regToName[register].length + 2 + 3 + "ch" }} className={`register ${getColourBorder(register === "pc", isHalted)} ${((register === "ac" && isAccumulatorChanged) ? "yellow-border" : "")}`} key={register}>{regToName[register]}: {value}</p>)
 	}
 
 	return (
@@ -202,10 +247,16 @@ function App() {
 			<main>
 				<Editor height="90vh" width="45vw" theme="vs-dark" defaultValue={defaultString} onMount={handleEditorDidMount} />
 				<div className="monitor">
-					<form onSubmit={onInputSubmitted} className="input-form">
-						<label htmlFor="ioinput" className={waitingForInput ? "green-border" : ""}>Input</label>
-						<input type="text" name="ioinput" value={input} onChange={onInputChanged} />
-					</form>
+					<div className="forms">
+						<form onSubmit={onInputSubmitted} className="input-form" autoComplete="off" autoCapitalize="off" autoCorrect="off">
+							<label htmlFor="ioinput" className={waitingForInput ? "green-border" : ""}>Input</label>
+							<input type="text" name="ioinput" value={input} onChange={onInputChanged} />
+						</form>
+						<form onSubmit={onSpeedSubmitted}>
+							<label htmlFor="runspeed">Speed (Current: {speed}Hz)</label>
+							<input type="number" name="runspeed" value={inputSpeed} onChange={onSpeedChanged} />
+						</form>
+					</div>
 					<div className="mem-reg-container">
 						<div className="memory">
 							<h2>Memory</h2>
