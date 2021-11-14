@@ -111,7 +111,6 @@ button:active {
 .output-box {
 	background-color: rgb(70, 70, 70);
 	border-radius: 15px;
-	/*padding: 1.5rem;*/
 	min-height: 13vh;
 	width: 100%;
 }

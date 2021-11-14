@@ -33,6 +33,14 @@ export const step = (memory, inIp, registers, output, wasWaitingForInput, input)
 		case 3:
 			memory[data] = registers.ac;
 			break;
+		// LOA
+		case 4: {
+			const offset = registers.ac;
+			const location = data + offset >= 100 ? 99 : data + offset;
+
+			registers.ac = memory[location];
+			break;
+		}
 		// LDA
 		case 5:
 			registers.ac = memory[data];
@@ -58,6 +66,9 @@ export const step = (memory, inIp, registers, output, wasWaitingForInput, input)
 			}
 			else if(data === 2) {
 				output += registers.ac + " ";
+			}
+			else if(data === 12) {
+				output += String.fromCharCode(registers.ac);
 			}
 			break;
 		default:

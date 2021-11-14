@@ -1,17 +1,19 @@
 // Returns the memory array
 
-const INSTRUCTIONS = ["LDA", "STA", "ADD", "SUB", "INP", "OUT", "HLT", "BRZ", "BRP", "BRA", "DAT"];
-const UNARY_INSTRUCTIONS = ["INP", "OUT", "HLT"];
+const INSTRUCTIONS = ["LDA", "STA", "LOA", "ADD", "SUB", "INP", "OUT", "OTC", "HLT", "BRZ", "BRP", "BRA", "DAT"];
+const UNARY_INSTRUCTIONS = ["INP", "OUT", "OTC", "HLT"];
 
 const UNARY_INSTRUCTION_CODE_MAP = {
 	"INP": 901,
 	"OUT": 902,
+	"OTC": 912,
 	"HLT": 0
 }
 
 const BINARY_INSTRUCTION_FIRST_VALUE = {
 	"LDA": "5",
 	"STA": "3",
+	"LOA": "4",
 	"ADD": "1",
 	"SUB": "2",
 	"BRZ": "7",
