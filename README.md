@@ -6,6 +6,6 @@ Offers assembly and emulation, with register and memory views.
 
 Can take I/O.
 
-Has both a 60Hz run mode and a step-through mode.
+Has both a run mode and a step-through mode.
 
 May contain some bugs and inefficient code, as it was made for a challenge over a day or two.
