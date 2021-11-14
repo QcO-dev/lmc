@@ -4,6 +4,7 @@ import Editor from "@monaco-editor/react";
 import { useRef, useState } from 'react';
 import { assemble } from './assembler';
 import { step } from './emulator';
+import { languageDef, configuration } from './editor-config'
 
 const defaultString = [
 	"// Input two numbers, sum them, and output the result",
@@ -15,6 +16,17 @@ const defaultString = [
 	"        HLT",
 	"FIRST   DAT 0"
 ].join("\n");
+
+const editorWillMount = monaco => {
+	if (!monaco.languages.getLanguages().some(({ id }) => id === 'lmc')) {
+		// Register a new language
+		monaco.languages.register({ id: 'lmc' })
+		// Register a tokens provider for the language
+		monaco.languages.setMonarchTokensProvider('lmc', languageDef)
+		// Set the editing configuration for the language
+		monaco.languages.setLanguageConfiguration('lmc', configuration)
+	}
+}
 
 function App() {
 
@@ -245,7 +257,7 @@ function App() {
 				<button onClick={stepCode}>Step</button>
 			</div>
 			<main>
-				<Editor height="90vh" width="45vw" theme="vs-dark" defaultValue={defaultString} onMount={handleEditorDidMount} />
+				<Editor height="90vh" width="45vw" language="lmc" theme="vs-dark" defaultValue={defaultString} beforeMount={editorWillMount} onMount={handleEditorDidMount} />
 				<div className="monitor">
 					<div className="forms">
 						<form onSubmit={onInputSubmitted} className="input-form" autoComplete="off" autoCapitalize="off" autoCorrect="off">

@@ -37,7 +37,7 @@ const toToken = (word, line) => {
 			line
 		}
 	}
-	else if(word.match(/^[A-Z][A-Z0-9]+$/)) {
+	else if(word.match(/^[A-Z][A-Z0-9]*$/)) {
 		return {
 			type: "label",
 			value: word,
