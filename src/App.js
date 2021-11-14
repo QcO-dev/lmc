@@ -6,6 +6,7 @@ import { assemble } from './assembler';
 import { step } from './emulator';
 import { languageDef, configuration } from './editor-config'
 import { examples } from './examples';
+import Description from './Description';
 
 const defaultString = [
 	"// Input two numbers, sum them, and output the result",
@@ -305,6 +306,10 @@ function App() {
 					</div>
 				</div>
 			</main>
+			<Description />
+			<footer>
+				Open Source on <a href="https://github.com/qco-dev/lmc">Github</a>.
+			</footer>
 		</div>
 	);
 }
