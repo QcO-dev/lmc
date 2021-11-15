@@ -113,6 +113,14 @@ export default function Description() {
 						The value of the accumulator does not change.
 					</p>
 				</div>
+				<div>
+					<h3>DAT</h3>
+					<small>Encoding: xxx</small>
+					<p>
+						The data instruction (DAT) encodes its operand as into the memory. 
+						It does not perform an operation.
+					</p>
+				</div>
 			</section>
 			<section>
 				<h2>Instructions - Non Standard</h2>
