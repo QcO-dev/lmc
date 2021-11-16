@@ -73,7 +73,7 @@ function App() {
 	}
 
 	const onInputSubmitted = (event) => {
-		submitRef.current = input.substring(0, 3)
+		submitRef.current = input.charAt(0) === '-' ? input.substring(0, 4) : input.substring(0, 3)
 		setInput("")
 		event.preventDefault()
 	}

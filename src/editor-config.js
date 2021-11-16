@@ -2,7 +2,7 @@ export const languageDef = {
 	defaultToken: "",
 	keywords: [
 		"LDA", "STA", "LOA", "ADD", "SUB", "INP", "OUT", "OTC", "HLT", "BRZ", "BRP", "BRA", "DAT"
-	],
+	].map(x => [x, x.toLowerCase()]).flat(),
 	tokenizer: {
 		root: [
 			{ include: '@whitespace' },

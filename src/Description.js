@@ -15,13 +15,13 @@ export default function Description() {
 				<h2>Registers</h2>
 				<p>
 					Each register has a specific purpose and may only hold one value.
-					<ul>
+				</p>
+				<ul>
 					<li>The Program Counter Register holds the address of the next instruction to be fetched.</li>
 					<li>The Instruction Register holds the instruction part of the value fetched from memory (the first digit).</li>
 					<li>The Address Register holds the address/data of the value fetched from memory (the second &amp; third digit).</li>
 					<li>The Accumulator Register holds the results of instructions, and is used with instructions such as ADD for the first operand.</li>
-					</ul>
-				</p>
+				</ul>
 			</section>
 			<section>
 				<h2>Assembly Language</h2>
